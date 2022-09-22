@@ -3,7 +3,8 @@
 # Microsoft Windows
 # https://www.microsoft.com
 
-set win_base_url http://{{ netbootxyz_http }}/WinPE
+set win_base_url ${live_endpoint}/WinPE
+set win_os win10
 set win_arch x64
 goto ${menu} ||
 
@@ -14,10 +15,18 @@ menu ${os}
 item --gap Installers
 item win_install ${space} Load ${os} Installer...
 item --gap Options:
+item os_set ${space} Version [ ${win_os} ]
 item arch_set ${space} Architecture [ ${win_arch} ]
 item url_set ${space} Base URL [ ${win_base_url} ]
 choose win_version || goto windows_exit
 goto ${win_version}
+
+:os_set
+menu Windows OS
+item win10 Windows 10
+item win11 Windows 11
+choose win_os
+goto windows
 
 :arch_set
 iseq ${win_arch} x64 && set win_arch x86 || set win_arch x64
@@ -30,11 +39,11 @@ echo
 echo -n URL: ${} && read win_base_url
 echo
 echo netboot.xyz will attempt to load the following files:
-echo ${win_base_url}/${win_arch}/bootmgr
-echo ${win_base_url}/${win_arch}/bootmgr.efi
-echo ${win_base_url}/${win_arch}/boot/bcd
-echo ${win_base_url}/${win_arch}/boot/boot.sdi
-echo ${win_base_url}/${win_arch}/sources/boot.wim
+echo ${win_base_url}/${win_os}/${win_arch}/bootmgr
+echo ${win_base_url}/${win_os}/${win_arch}/bootmgr.efi
+echo ${win_base_url}/${win_os}/${win_arch}/boot/bcd
+echo ${win_base_url}/${win_os}/${win_arch}/boot/boot.sdi
+echo ${win_base_url}/${win_os}/${win_arch}/sources/boot.wim
 echo
 prompt Press any key to return to Windows Menu...
 goto windows
@@ -45,13 +54,13 @@ isset ${win_base_url} && goto boot || echo URL not set... && goto url_set
 :boot
 imgfree
 kernel ${win_base_url}/wimboot
-initrd -n bootmgr     ${win_base_url}/${win_arch}/bootmgr       bootmgr ||
-initrd -n bootmgr.efi ${win_base_url}/${win_arch}/bootmgr.efi   bootmgr.efi ||      
-initrd -n bcd         ${win_base_url}/${win_arch}/boot/bcd      bcd ||
-initrd -n bcd         ${win_base_url}/${win_arch}/Boot/BCD      bcd ||
-initrd -n boot.sdi    ${win_base_url}/${win_arch}/boot/boot.sdi boot.sdi ||
-initrd -n boot.sdi    ${win_base_url}/${win_arch}/Boot/boot.sdi boot.sdi ||
-initrd -n boot.wim    ${win_base_url}/${win_arch}/sources/boot.wim boot.wim
+initrd -n bootmgr     ${win_base_url}/${win_os}/${win_arch}/bootmgr       bootmgr ||
+initrd -n bootmgr.efi ${win_base_url}/${win_os}/${win_arch}/bootmgr.efi   bootmgr.efi ||      
+initrd -n bcd         ${win_base_url}/${win_os}/${win_arch}/boot/bcd      bcd ||
+initrd -n bcd         ${win_base_url}/${win_os}/${win_arch}/Boot/BCD      bcd ||
+initrd -n boot.sdi    ${win_base_url}/${win_os}/${win_arch}/boot/boot.sdi boot.sdi ||
+initrd -n boot.sdi    ${win_base_url}/${win_os}/${win_arch}/Boot/boot.sdi boot.sdi ||
+initrd -n boot.wim    ${win_base_url}/${win_os}/${win_arch}/sources/boot.wim boot.wim
 boot
 
 :windows_exit
