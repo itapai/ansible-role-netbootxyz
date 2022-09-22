@@ -1,5 +1,5 @@
 ---
-netbootxyz_endpoint: 'http://netbootxyz.lan'
+netbootxyz_live_endpoint: 'http://netbootxyz.lan'
 netbootxyz_path: /opt/netbootxyz
 netbootxyz_user_id: 1000
 netbootxyz_group_id: 1000
