@@ -17,9 +17,9 @@
       - '{{ netbootxyz_path }}/config:/config'
       - '{{ netbootxyz_path }}/assets:/assets'
 
-# - name: Pause until container downloads assets
-#   ansible.builtin.pause:
-#     seconds: 10
+- name: Pause until container downloads assets
+  ansible.builtin.pause:
+    seconds: 5
 
 - name: Copy local-vars.ipxe
   ansible.builtin.template:
