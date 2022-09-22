@@ -3,12 +3,12 @@
 # Microsoft Windows
 # https://www.microsoft.com
 
-set win_base_url http://10.2.0.18:8080
+set win_base_url http://{{ netbootxyz_http }}/WinPE
 set win_arch x64
 goto ${menu} ||
 
 :windows
-set os Microsoft Windowz
+set os Microsoft Windows
 clear win_version
 menu ${os} 
 item --gap Installers
@@ -44,7 +44,7 @@ isset ${win_base_url} && goto boot || echo URL not set... && goto url_set
 
 :boot
 imgfree
-kernel http://${boot_domain}/wimboot
+kernel ${win_base_url}/wimboot
 initrd -n bootmgr     ${win_base_url}/${win_arch}/bootmgr       bootmgr ||
 initrd -n bootmgr.efi ${win_base_url}/${win_arch}/bootmgr.efi   bootmgr.efi ||      
 initrd -n bcd         ${win_base_url}/${win_arch}/boot/bcd      bcd ||

@@ -7,8 +7,8 @@
     image: linuxserver/netbootxyz
     restart_policy: unless-stopped
     env:
-      PUID: '{{ netbootxyz_user_id | string}}'
-      GUID: '{{ netbootxyz_group_id | string}}'
+      PUID: '{{ netbootxyz_user_id | string }}'
+      GUID: '{{ netbootxyz_group_id | string }}'
     ports:
       - 69:69/udp
       - 3000:3000
@@ -17,8 +17,41 @@
       - '{{ netbootxyz_path }}/config:/config'
       - '{{ netbootxyz_path }}/assets:/assets'
 
-# - name: Copy netbootxyz boot.cfg
+# - name: Create custom menus directory
+#   ansible.builtin.file:
+#     path: '{{ netbootxyz_path }}/config/menus/local'
+#     state: directory
+#     recurse: yes
+
+# - name: Copy boot.cfg
 #   ansible.builtin.template:
 #     src: templates/boot.cfg.j2
-#     dest: "{{ netbootxyz_path }}/config/menus/boot.cfg"
+#     dest: "{{ netbootxyz_path }}/config/menus/local/boot.cfg"
+#     mode: 0644
+
+- name: Pause until you can verify updates to an application were successful
+  ansible.builtin.pause:
+
+- name: Copy menu.ipxe
+  ansible.builtin.template:
+    src: templates/menu.ipxe.j2
+    dest: "{{ netbootxyz_path }}/config/menus/menu.ipxe"
+    mode: 0644
+
+# - name: Copy windows.ipxe
+#   ansible.builtin.template:
+#     src: templates/windows.ipxe.j2
+#     dest: "{{ netbootxyz_path }}/config/menus/windows.ipxe"
+#     mode: 0644
+
+# - name: Copy windows.ipxe
+#   ansible.builtin.template:
+#     src: templates/windows.ipxe.j2
+#     dest: "{{ netbootxyz_path }}/config/menus/local/windows.ipxe"
+#     mode: 0644
+
+# - name: Copy windows.ipxe
+#   ansible.builtin.template:
+#     src: templates/windows.ipxe.j2
+#     dest: "{{ netbootxyz_path }}/config/menus/remote/windows.ipxe"
 #     mode: 0644
