@@ -11,8 +11,8 @@
       GUID: '{{ netbootxyz_group_id | string }}'
     ports:
       - 69:69/udp
-      - 3000:3000
-      - 8080:80
+      - '{{ netbootxyz_webui_port }}:3000'
+      - '{{ netbootxyz_content_port }}:80'
     volumes:
       - '{{ netbootxyz_path }}/config:/config'
       - '{{ netbootxyz_path }}/assets:/assets'
